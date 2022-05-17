@@ -1,0 +1,31 @@
+{
+    "namespace": "airqueue.model",
+    "name": "Flight",
+    "type": "record",
+    "fields": [
+    {
+        "name": "airline",
+        "type": "string"
+    },
+    {
+        "name": "flight_number",
+        "type": "string"
+    },
+    {
+        "name": "tail_number",
+        "type": "string"
+    },
+    {
+        "name": "origin_airport",
+        "type": "string"
+    },
+    {
+        "name": "destination_airport",
+        "type": "string"
+    },
+    {
+        "name": "arrival_delay",
+        "type": "double"
+    }
+    ]
+}

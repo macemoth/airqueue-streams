@@ -1,0 +1,35 @@
+{
+    "namespace": "airqueue.model",
+    "name": "Airport",
+    "type": "record",
+    "fields": [
+    {
+        "name": "IATA_code",
+        "type": "string"
+    },
+    {
+        "name": "airport",
+        "type": "string"
+    },
+    {
+        "name": "city",
+        "type": "string"
+    },
+    {
+        "name": "state",
+        "type": "string"
+    },
+    {
+        "name": "country",
+        "type": "string"
+    },
+    {
+        "name": "latitude",
+        "type": "double"
+    },
+    {
+        "name": "longitude",
+        "type": "double"
+    }
+    ]
+}

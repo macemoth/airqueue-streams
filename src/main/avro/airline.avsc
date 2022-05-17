@@ -1,0 +1,15 @@
+{
+    "namespace": "airqueue.model",
+    "name": "Airline",
+    "type": "record",
+    "fields": [
+    {
+        "name": "IATA_code",
+        "type": "string"
+    },
+    {
+        "name": "airline",
+        "type": "string"
+    }
+    ]
+}
