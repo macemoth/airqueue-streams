@@ -1,6 +1,6 @@
 package ch.unisg.airqueue.serialisation;
 
-import airqueue.model.Flight;
+import ch.unisg.airqueue.model.Flight;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import org.apache.kafka.common.serialization.Serde;
 

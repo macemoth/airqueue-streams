@@ -40,13 +40,23 @@ services:
     volumes:
       - ./scripts:/scripts
 
-  schema-registry:
-    image: confluentinc/cp-schema-registry:6.0.0
-    depends_on:
-      - zookeeper
-      - kafka
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:32181
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
     ports:
-      - "8081:8081"
+      - "8080:8080"
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=localhost:32181
+#  schema-registry:
+#    image: confluentinc/cp-schema-registry:6.0.0
+#    depends_on:
+#      - zookeeper
+#      - kafka
+#    environment:
+#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+#      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:32181
+#    ports:
+#      - "8081:8081"

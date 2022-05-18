@@ -1,5 +1,5 @@
 {
-    "namespace": "airqueue.model",
+    "namespace": "ch.unisg.airqueue.model",
     "name": "Flight",
     "type": "record",
     "fields": [

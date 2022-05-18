@@ -19,7 +19,7 @@ public class App {
 
     public static void main(String[] args) {
         LOGGER.info("Building topology...");
-        Topology topology = FlightDataTopology.buildTopology();
+        Topology topology = FlightDataAnalysisTopology.buildTopology();
         LOGGER.info("Topology built");
 
         Properties props = new Properties();

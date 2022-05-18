@@ -1,0 +1,15 @@
+{
+    "namespace": "ch.unisg.airqueue.model",
+    "name": "FlightWithAirline",
+    "type": "record",
+    "fields": [
+    {
+        "name": "flight",
+        "type": "ch.unisg.airqueue.model.Flight"
+    },
+    {
+        "name": "airline",
+        "type": "ch.unisg.airqueue.model.Airline"
+    }
+    ]
+}
