@@ -7,9 +7,11 @@ import ch.unisg.airqueue.model.Flight;
 import ch.unisg.airqueue.model.FlightWithAirline;
 import ch.unisg.airqueue.serialisation.JsonSerdes;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.state.KeyValueStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,30 +60,32 @@ public class FlightDataAnalysisTopology {
         TimeWindows tumblingWindow = TimeWindows.of(Duration.ofMinutes(5)).grace(Duration.ofSeconds(10));
 
         // Group by destination airport
-        KTable<Windowed<String>, Long> avgPerAirport = flights
-//                .peek(
-//                        (key, value) -> {
-//                            LOGGER.info("Got " + key + " with value " + value);
-//                        }
-//                )
+        KGroupedStream<String, Flight> flightsByAirport = flights
                 .groupBy((key, value) -> value.getDestinationAirport(),
-                Grouped.with(Serdes.String(), JsonSerdes.Flight()))
-                .windowedBy(tumblingWindow)
-                .count(Materialized.as("average"))
-                .suppress(Suppressed.untilWindowCloses(Suppressed.BufferConfig.unbounded().shutDownWhenFull()));
-//
-//        Initializer<Average> averageInitializer = Average::new;
-//
-//        Aggregator<String, FlightWithAirline, Average> averageAdder =
-//            (key, value, aggregate) -> aggregate.add(value);
-//
-//        KTable<String, Average> groupedFlightsTable = groupedFlights.aggregate(
-//            averageInitializer,
-//            averageAdder,
-//            Materialized.<String, Average, KeyValueStore<Bytes, byte[]>>
-//                    as("averages")
-//                    .withKeySerde(Serdes.String())
-//                    .withValueSerde(JsonSerdes.Average()));
+                Grouped.with(Serdes.String(), JsonSerdes.Flight()));
+                //.windowedBy(tumblingWindow)
+
+        Initializer<Average> averageInitializer = Average::new;
+
+        Aggregator<String, Flight, Average> averageAdder =
+            (key, value, aggregate) -> aggregate.add(value);
+
+        KTable<String, Average> groupedFlightsTable = flightsByAirport.aggregate(
+            averageInitializer,
+            averageAdder,
+            Materialized.<String, Average, KeyValueStore<Bytes, byte[]>>
+                    as("averages")
+                    .withKeySerde(Serdes.String())
+                    .withValueSerde(JsonSerdes.Average()));
+
+
+        groupedFlightsTable.toStream()
+                .peek(
+                        (key, value) -> {
+                            LOGGER.info("Got " + key + " with value " + value.getAverage());
+                        }
+                )
+                .to("tracked");
 
         return builder.build();
     }

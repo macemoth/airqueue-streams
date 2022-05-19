@@ -1,9 +1,11 @@
 package ch.unisg.airqueue;
 
+import ch.unisg.airqueue.controller.HttpController;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.state.HostInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,9 +44,9 @@ public class App {
         LOGGER.info("Starting up Kafka Streams");
         streams.start();
 
-        LOGGER.info("Starting up HTTP Server");
-        // TODO
-
+        LOGGER.info("Starting up HTTP Controller");
+        HttpController controller = new HttpController(APP_HOST, APP_PORT, streams);
+        controller.start();
     }
 
 
