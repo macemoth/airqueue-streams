@@ -44,8 +44,11 @@ public class HttpController {
     public void start() {
         Javalin javalinApp = Javalin.create().start(hostInfo.port());
 
-        /** Local key-value store query: all entries */
+        // Local key-value store query: all entries
         javalinApp.get("/averages", this::getAll);
+
+        // Render all as html
+        javalinApp.get("averagesList", this::getAllHtml);
     }
 
     public void getAll(Context context) {
@@ -59,6 +62,24 @@ public class HttpController {
 
          averages.close();
          context.json(averageDelays);
+    }
+
+    public void getAllHtml(Context context) {
+        KeyValueIterator<String, Average> averages = getAverages().all();
+        StringBuilder page = new StringBuilder();
+        page.append("<html> <head><title>airqueue: Average delay by airport</title>");
+        page.append("<style type=\"text/css\">p font-family: Comic Sans MS;</style></head>");
+        page.append("<body><h1>Average delay by airport</h1>");
+        page.append("<table><thead><th>Airport</th><th>Avgerage Delay (minutes)</th></thead>");
+        page.append("<tbody>");
+        while(averages.hasNext()) {
+            KeyValue<String, Average> average = averages.next();
+            page.append("<tr><td>" + average.key + "</td><td>" + average.value.getAverage() + "</td></tr>");
+        }
+        averages.close();
+
+        page.append("</tbody></table></body></html>");
+        context.html(page.toString());
     }
 
 
