@@ -1,10 +1,7 @@
 package ch.unisg.airqueue;
 
 
-import ch.unisg.airqueue.model.Airline;
-import ch.unisg.airqueue.model.Airport;
-import ch.unisg.airqueue.model.Flight;
-import ch.unisg.airqueue.model.FlightWithAirline;
+import ch.unisg.airqueue.model.*;
 import ch.unisg.airqueue.serialisation.JsonSerdes;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
@@ -28,21 +25,19 @@ public class FlightDataAnalysisTopology {
         KStream<String, Flight> flights =
                 builder.stream("flights", Consumed.with(Serdes.ByteArray(), JsonSerdes.Flight())
                         .withTimestampExtractor(new FlightTimestampExtractor()))
-                // stream is unkeyed, now we choose airline, as we join with that
+                // stream is unkeyed, we select airline as key to meet co-partitioning requirements
                 .selectKey((k, v) -> v.getAirline());
-        LOGGER.info("KStream flights created");
 
         // TODO: Consider and discuss filtering
 
-        // Airlines has IATA code as key
-        // TODO: ADR on whether to use KTable or GlobalKTable
+        // Airlines has IATA code as key (same as airline in flight)
+        // TODO: ADR on whether to use KTable or GlobalKTable: we choose GlobalKTable for airports with the hope we don't have to rekey twice
         KTable<String, Airline> airlines =
                 builder.table("airlines", Consumed.with(Serdes.String(), JsonSerdes.Airline()));
-        LOGGER.info("KTable airlines created");
 
         // Airports has IATA code as key
-        KTable<String, Airport> airports =
-                builder.table("airports", Consumed.with(Serdes.String(), JsonSerdes.Airport()));
+        GlobalKTable<String, Airport> airports =
+                builder.globalTable("airports", Consumed.with(Serdes.String(), JsonSerdes.Airport()));
 
         // Join Flights with Airlines
         Joined<String, Flight, Airline> flightAirlineJoined =
@@ -53,6 +48,17 @@ public class FlightDataAnalysisTopology {
 
         KStream<String, FlightWithAirline> flightsWithAirlines =
                 flights.join(airlines, flightAirlineJoiner, flightAirlineJoined);
+
+        // Create mappers to prevent rekeying
+//        KeyValueMapper<String, FlightWithAirline, String> originAirportMapper =
+//                (leftKey, flightWithAirline) -> {
+//                    return flightWithAirline.getFlight().getOriginAirport();
+//                };
+//
+//        KeyValueMapper<String, FlightWithAirline, String> destinationAirportMapper =
+//                (leftKey, flightWithAirline) -> {
+//                    return flightWithAirline.getFlight().getDestinationAirport();
+//                };
 
         // TODO: Join with Start and destination airports
 
