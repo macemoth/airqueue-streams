@@ -9,6 +9,7 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
+import org.apache.kafka.streams.state.WindowStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,23 +64,23 @@ public class FlightDataAnalysisTopology {
         // TODO: Join with Start and destination airports
 
         // Create tumbling window of 30 min above flights
-        TimeWindows tumblingWindow = TimeWindows.of(Duration.ofMinutes(5)).grace(Duration.ofSeconds(10));
+        TimeWindows hoppingWindow = TimeWindows.of(Duration.ofMinutes(5)).advanceBy(Duration.ofSeconds(10));
 
         // Group by destination airport
-        KGroupedStream<String, Flight> flightsByAirport = flights
+        TimeWindowedKStream<String, Flight> flightsByAirport = flights
                 .groupBy((key, value) -> value.getDestinationAirport(),
-                Grouped.with(Serdes.String(), JsonSerdes.Flight()));
-                //.windowedBy(tumblingWindow)
+                Grouped.with(Serdes.String(), JsonSerdes.Flight()))
+                .windowedBy(hoppingWindow);
 
         Initializer<Average> averageInitializer = Average::new;
 
         Aggregator<String, Flight, Average> averageAdder =
             (key, value, aggregate) -> aggregate.add(value);
 
-        KTable<String, Average> groupedFlightsTable = flightsByAirport.aggregate(
+        KTable<Windowed<String>, Average> groupedFlightsTable = flightsByAirport.aggregate(
             averageInitializer,
             averageAdder,
-            Materialized.<String, Average, KeyValueStore<Bytes, byte[]>>
+            Materialized.<String, Average, WindowStore<Bytes, byte[]>>
                     as("averages")
                     .withKeySerde(Serdes.String())
                     .withValueSerde(JsonSerdes.Average()));
