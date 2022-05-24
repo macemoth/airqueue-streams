@@ -67,14 +67,14 @@ public class FlightDataAnalysisTopology {
         TimeWindows hoppingWindow = TimeWindows.of(Duration.ofMinutes(5)).advanceBy(Duration.ofSeconds(10));
 
         // Group by destination airport
-        TimeWindowedKStream<String, Flight> flightsByAirport = flights
+        TimeWindowedKStream<String, FlightEnriched> flightsByAirport = flights
                 .groupBy((key, value) -> value.getDestinationAirport(),
                 Grouped.with(Serdes.String(), JsonSerdes.Flight()))
                 .windowedBy(hoppingWindow);
 
         Initializer<Average> averageInitializer = Average::new;
 
-        Aggregator<String, Flight, Average> averageAdder =
+        Aggregator<String, FlightEnriched, Average> averageAdder =
             (key, value, aggregate) -> aggregate.add(value);
 
         KTable<Windowed<String>, Average> groupedFlightsTable = flightsByAirport.aggregate(

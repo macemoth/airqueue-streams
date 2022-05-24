@@ -42,4 +42,52 @@ public class FlightEnriched {
                 + "'"
                 + "}";
     }
+
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
+    }
+
+    public String getAirlineName() {
+        return airlineName;
+    }
+
+    public void setAirlineName(String airlineName) {
+        this.airlineName = airlineName;
+    }
+
+    public String getStartAirportName() {
+        return startAirportName;
+    }
+
+    public void setStartAirportName(String startAirportName) {
+        this.startAirportName = startAirportName;
+    }
+
+    public String getDestinationAirportName() {
+        return destinationAirportName;
+    }
+
+    public void setDestinationAirportName(String destinationAirportName) {
+        this.destinationAirportName = destinationAirportName;
+    }
+
+    public double getDepartureDelay() {
+        return departureDelay;
+    }
+
+    public void setDepartureDelay(double departureDelay) {
+        this.departureDelay = departureDelay;
+    }
+
+    public double getArrivalDelay() {
+        return arrivalDelay;
+    }
+
+    public void setArrivalDelay(double arrivalDelay) {
+        this.arrivalDelay = arrivalDelay;
+    }
 }
