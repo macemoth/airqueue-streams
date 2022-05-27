@@ -1,10 +1,7 @@
 package ch.unisg.airqueue.serialisation;
 
 import ch.unisg.airqueue.Average;
-import ch.unisg.airqueue.model.Airline;
-import ch.unisg.airqueue.model.Airport;
-import ch.unisg.airqueue.model.Flight;
-import ch.unisg.airqueue.model.FlightWithAirline;
+import ch.unisg.airqueue.model.*;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 
@@ -34,6 +31,18 @@ public class JsonSerdes {
     public static Serde<FlightWithAirline> FlightWithAirline() {
         JsonSerialiser<FlightWithAirline> serialiser = new JsonSerialiser<>();
         JsonDeserialiser<FlightWithAirline> deserialiser = new JsonDeserialiser<>(FlightWithAirline.class);
+        return Serdes.serdeFrom(serialiser, deserialiser);
+    }
+
+    public static Serde<FlightWithOriginAirport> FlightWithOriginAirport() {
+        JsonSerialiser<FlightWithOriginAirport> serialiser = new JsonSerialiser<>();
+        JsonDeserialiser<FlightWithOriginAirport> deserialiser = new JsonDeserialiser<>(FlightWithOriginAirport.class);
+        return Serdes.serdeFrom(serialiser, deserialiser);
+    }
+
+    public static Serde<FlightEnriched> FlightEnriched() {
+        JsonSerialiser<FlightEnriched> serialiser = new JsonSerialiser<>();
+        JsonDeserialiser<FlightEnriched> deserialiser = new JsonDeserialiser<>(FlightEnriched.class);
         return Serdes.serdeFrom(serialiser, deserialiser);
     }
 

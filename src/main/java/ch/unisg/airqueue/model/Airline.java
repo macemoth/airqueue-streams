@@ -1,14 +1,14 @@
 package ch.unisg.airqueue.model;
 
 public class Airline {
-    private String IATACode;
+    private String iataCode;
     private String airlineName;
 
     @Override
     public String toString() {
         return "{"
-                + " IATACode='"
-                + IATACode
+                + " iataCode='"
+                + iataCode
                 + "'"
                 + ", airlineName='"
                 + airlineName
@@ -16,12 +16,12 @@ public class Airline {
                 + "}";
     }
 
-    public String getIATACode() {
-        return IATACode;
+    public String getIataCode() {
+        return iataCode;
     }
 
-    public void setIATACode(String IATACode) {
-        this.IATACode = IATACode;
+    public void setIataCode(String iataCode) {
+        this.iataCode = iataCode;
     }
 
     public String getAirlineName() {

@@ -57,7 +57,7 @@ public class HttpController {
 
          while(averages.hasNext()) {
              KeyValue<String, Average> average = averages.next();
-             averageDelays.put(average.key, average.value.getAverage());
+             averageDelays.put(average.key, average.value.getArrivalAverage());
          }
 
          averages.close();
@@ -74,7 +74,7 @@ public class HttpController {
         page.append("<tbody>");
         while(averages.hasNext()) {
             KeyValue<String, Average> average = averages.next();
-            page.append("<tr><td>" + average.key + "</td><td>" + average.value.getAverage() + "</td></tr>");
+            page.append("<tr><td>" + average.key + "</td><td>" + average.value.getArrivalAverage() + "</td></tr>");
         }
         averages.close();
 

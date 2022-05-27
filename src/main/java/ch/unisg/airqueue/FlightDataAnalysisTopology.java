@@ -29,6 +29,7 @@ public class FlightDataAnalysisTopology {
                 // stream is unkeyed, we select airline as key to meet co-partitioning requirements
                 .selectKey((k, v) -> v.getAirline());
 
+
         // TODO: Consider and discuss filtering
 
         // Airlines has IATA code as key (same as airline in flight)
@@ -50,49 +51,74 @@ public class FlightDataAnalysisTopology {
         KStream<String, FlightWithAirline> flightsWithAirlines =
                 flights.join(airlines, flightAirlineJoiner, flightAirlineJoined);
 
-        // Create mappers to prevent rekeying
-//        KeyValueMapper<String, FlightWithAirline, String> originAirportMapper =
-//                (leftKey, flightWithAirline) -> {
-//                    return flightWithAirline.getFlight().getOriginAirport();
-//                };
-//
-//        KeyValueMapper<String, FlightWithAirline, String> destinationAirportMapper =
-//                (leftKey, flightWithAirline) -> {
-//                    return flightWithAirline.getFlight().getDestinationAirport();
-//                };
+        // Create mapper to prevent rekeying for next two joins (therefore we use a GlobalKTable)
+        KeyValueMapper<String, FlightWithAirline, String> originAirportMapper =
+                (leftKey, flightWithAirline) -> {
+                    return flightWithAirline.getFlight().getOriginAirport();
+                };
 
-        // TODO: Join with Start and destination airports
+        // Join with origin Airport
+        ValueJoiner<FlightWithAirline, Airport, FlightWithOriginAirport> originAirportJoiner =
+                (flightWithAirline, airport) -> new FlightWithOriginAirport(
+                        flightWithAirline.getFlight(),
+                        flightWithAirline.getAirline(),
+                        airport);
+
+        KStream<String, FlightWithOriginAirport> flightsWithOriginAirport =
+                flightsWithAirlines.join(airports, originAirportMapper, originAirportJoiner);
+
+        // Join with destination airport to create final FlightEnriched in the same manner as with origin airport
+        KeyValueMapper<String, FlightWithOriginAirport, String> destinationAirportMapper =
+                (leftKey, flightWithAirline) -> {
+                    return flightWithAirline.getFlight().getDestinationAirport();
+                };
+
+        ValueJoiner<FlightWithOriginAirport, Airport, FlightEnriched> enrichedFlightJoiner =
+                (flightWithOriginAirport, airport) -> new FlightEnriched(
+                        flightWithOriginAirport.getFlight(),
+                        flightWithOriginAirport.getAirline(),
+                        flightWithOriginAirport.getOriginAirport(),
+                        airport
+                );
+
+        KStream<String, FlightEnriched> flightsEnriched =
+                flightsWithOriginAirport.join(airports, destinationAirportMapper, enrichedFlightJoiner)
+                        .peek(
+                                (key, value) -> {
+                                    LOGGER.info("Joined product " + key + " with value " + value);
+                                }
+                        );
 
         // Create tumbling window of 30 min above flights
-        TimeWindows hoppingWindow = TimeWindows.of(Duration.ofMinutes(5)).advanceBy(Duration.ofSeconds(10));
-
-        // Group by destination airport
-        TimeWindowedKStream<String, FlightEnriched> flightsByAirport = flights
-                .groupBy((key, value) -> value.getDestinationAirport(),
-                Grouped.with(Serdes.String(), JsonSerdes.Flight()))
-                .windowedBy(hoppingWindow);
-
-        Initializer<Average> averageInitializer = Average::new;
-
-        Aggregator<String, FlightEnriched, Average> averageAdder =
-            (key, value, aggregate) -> aggregate.add(value);
-
-        KTable<Windowed<String>, Average> groupedFlightsTable = flightsByAirport.aggregate(
-            averageInitializer,
-            averageAdder,
-            Materialized.<String, Average, WindowStore<Bytes, byte[]>>
-                    as("averages")
-                    .withKeySerde(Serdes.String())
-                    .withValueSerde(JsonSerdes.Average()));
-
-
-        groupedFlightsTable.toStream()
-                .peek(
-                        (key, value) -> {
-                            LOGGER.info("Got " + key + " with value " + value.getAverage());
-                        }
-                )
-                .to("tracked");
+//        TimeWindows hoppingWindow = TimeWindows.of(Duration.ofMinutes(5)).advanceBy(Duration.ofSeconds(10));
+//
+//        // Group by destination airport
+//        TimeWindowedKStream<String, FlightEnriched> flightsByAirport = flights
+//                .groupBy((key, value) -> value.getDestinationAirport(),
+//                Grouped.with(Serdes.String(), JsonSerdes.Flight()))
+//                .windowedBy(hoppingWindow);
+//
+//        Initializer<Average> averageInitializer = Average::new;
+//
+//        Aggregator<String, FlightEnriched, Average> averageAdder =
+//            (key, value, aggregate) -> aggregate.add(value);
+//
+//        KTable<Windowed<String>, Average> groupedFlightsTable = flightsByAirport.aggregate(
+//            averageInitializer,
+//            averageAdder,
+//            Materialized.<String, Average, WindowStore<Bytes, byte[]>>
+//                    as("averages")
+//                    .withKeySerde(Serdes.String())
+//                    .withValueSerde(JsonSerdes.Average()));
+//
+//
+//        groupedFlightsTable.toStream()
+//                .peek(
+//                        (key, value) -> {
+//                            LOGGER.info("Got " + key + " with value " + value.getAverage());
+//                        }
+//                )
+//                .to("tracked");
 
         return builder.build();
     }
