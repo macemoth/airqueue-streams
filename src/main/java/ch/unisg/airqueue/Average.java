@@ -1,6 +1,5 @@
 package ch.unisg.airqueue;
 
-import ch.unisg.airqueue.model.Flight;
 import ch.unisg.airqueue.model.FlightEnriched;
 
 import java.util.ArrayList;
@@ -16,6 +15,9 @@ public class Average {
     }
 
     public double getArrivalAverage() {
+        if(flights.size() == 0) {
+            return Double.NaN;
+        }
         double sum = 0;
         for (FlightEnriched flight : flights) {
             sum += flight.getArrivalDelay();
@@ -24,10 +26,13 @@ public class Average {
     }
 
     public double getDepartureAverage() {
+        if(flights.size() == 0) {
+            return Double.NaN;
+        }
         double sum = 0;
         for (FlightEnriched flight: flights) {
             sum += flight.getDepartureDelay();
         }
-        return sum / flights.size();
+        return sum / ((double) flights.size());
     }
 }

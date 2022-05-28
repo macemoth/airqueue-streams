@@ -9,15 +9,14 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
-import org.apache.kafka.streams.state.WindowStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
-public class FlightDataAnalysisTopology {
+public class EnrichAndDelayTopology {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FlightDataAnalysisTopology.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnrichAndDelayTopology.class);
 
     public static Topology buildTopology() {
         StreamsBuilder builder = new StreamsBuilder();
@@ -89,36 +88,53 @@ public class FlightDataAnalysisTopology {
                                 }
                         );
 
+        // Write to tracked using custom serialiser
+        flightsEnriched.to("tracked", Produced.with(Serdes.String(), JsonSerdes.FlightEnriched()));
+
         // Create tumbling window of 30 min above flights
-//        TimeWindows hoppingWindow = TimeWindows.of(Duration.ofMinutes(5)).advanceBy(Duration.ofSeconds(10));
-//
-//        // Group by destination airport
-//        TimeWindowedKStream<String, FlightEnriched> flightsByAirport = flights
-//                .groupBy((key, value) -> value.getDestinationAirport(),
-//                Grouped.with(Serdes.String(), JsonSerdes.Flight()))
-//                .windowedBy(hoppingWindow);
-//
-//        Initializer<Average> averageInitializer = Average::new;
-//
-//        Aggregator<String, FlightEnriched, Average> averageAdder =
-//            (key, value, aggregate) -> aggregate.add(value);
-//
-//        KTable<Windowed<String>, Average> groupedFlightsTable = flightsByAirport.aggregate(
-//            averageInitializer,
-//            averageAdder,
-//            Materialized.<String, Average, WindowStore<Bytes, byte[]>>
-//                    as("averages")
-//                    .withKeySerde(Serdes.String())
-//                    .withValueSerde(JsonSerdes.Average()));
-//
-//
-//        groupedFlightsTable.toStream()
-//                .peek(
-//                        (key, value) -> {
-//                            LOGGER.info("Got " + key + " with value " + value.getAverage());
-//                        }
-//                )
-//                .to("tracked");
+        TimeWindows hoppingWindow = TimeWindows.of(Duration.ofMinutes(30)).advanceBy(Duration.ofSeconds(10));
+
+        Initializer<Average> averageInitializer = Average::new;
+
+        Aggregator<String, FlightEnriched, Average> averageAdder =
+                (key, value, aggregate) -> aggregate.add(value);
+
+        // Group by destination airport, put into windows and aggregate over every window
+        KTable<String, Average> windowedDestinationAverages = flightsEnriched
+                .groupBy((key, value) -> value.getDestinationAirportCode(),
+                    Grouped.with(Serdes.String(), JsonSerdes.FlightEnriched()))
+                .windowedBy(hoppingWindow)
+                .aggregate(averageInitializer, averageAdder, Materialized.with(Serdes.String(), JsonSerdes.Average()))
+                .toStream()
+                .selectKey((k, v) -> k.key())
+                .toTable(Materialized.with(Serdes.String(), JsonSerdes.Average()));
+
+        // Do the same, but for origin airports
+        KTable<String, Average> windowedOriginAverages = flightsEnriched
+                .groupBy((key, value) -> value.getOriginAirportCode(),
+                        Grouped.with(Serdes.String(), JsonSerdes.FlightEnriched()))
+                .windowedBy(hoppingWindow)
+                .aggregate(averageInitializer, averageAdder, Materialized.with(Serdes.String(), JsonSerdes.Average()))
+                .toStream()
+                .selectKey((k, v) -> k.key())
+                .toTable(Materialized.with(Serdes.String(), JsonSerdes.Average()));
+
+        // Finally, join the two tables to get origin and destination delays by airport.
+        Joined<String, Average, Average> airportDelayJoined =
+                Joined.with(Serdes.String(), JsonSerdes.Average(), JsonSerdes.Average());
+
+        ValueJoiner<Average, Average, AirportDelay> airportDelayJoiner =
+                (averageOrigin, averageDestination) -> new AirportDelay(
+                        averageOrigin.getDepartureAverage(), averageDestination.getArrivalAverage()
+                );
+
+        // TODO: if time allows, do outer join
+        KTable<String, AirportDelay> delaysByAirport =
+                windowedOriginAverages.join(windowedDestinationAverages, airportDelayJoiner,
+                        Materialized.<String, AirportDelay, KeyValueStore<Bytes, byte[]>>
+                                as("delays")
+                                .withKeySerde(Serdes.String())
+                                .withValueSerde(JsonSerdes.AirportDelay()));
 
         return builder.build();
     }

@@ -52,4 +52,10 @@ public class JsonSerdes {
         return Serdes.serdeFrom(serialiser, deserialiser);
     }
 
+    public static Serde<AirportDelay> AirportDelay() {
+        JsonSerialiser<AirportDelay> serialiser = new JsonSerialiser<>();
+        JsonDeserialiser<AirportDelay> deserialiser = new JsonDeserialiser<>(AirportDelay.class);
+        return Serdes.serdeFrom(serialiser, deserialiser);
+    }
+
 }
