@@ -1,6 +1,7 @@
 package ch.unisg.airqueue;
 
 
+import ch.unisg.airqueue.TimestampExtractors.FlightTimestampExtractor;
 import ch.unisg.airqueue.model.*;
 import ch.unisg.airqueue.serialisation.JsonSerdes;
 import org.apache.kafka.common.serialization.Serdes;

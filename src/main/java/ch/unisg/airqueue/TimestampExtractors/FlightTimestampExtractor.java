@@ -1,4 +1,4 @@
-package ch.unisg.airqueue;
+package ch.unisg.airqueue.TimestampExtractors;
 
 import ch.unisg.airqueue.model.Flight;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

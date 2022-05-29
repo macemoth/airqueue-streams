@@ -58,4 +58,10 @@ public class JsonSerdes {
         return Serdes.serdeFrom(serialiser, deserialiser);
     }
 
+    public static Serde<AcasEvent> AcasEvent() {
+        JsonSerialiser<AcasEvent> serialiser = new JsonSerialiser<>();
+        JsonDeserialiser<AcasEvent> deserialiser = new JsonDeserialiser<>(AcasEvent.class);
+        return Serdes.serdeFrom(serialiser, deserialiser);
+    }
+
 }
