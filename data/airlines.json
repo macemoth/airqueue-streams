@@ -1,14 +1,14 @@
-UA|{"IATA_code":"UA","airline_name":"United Air Lines Inc."}
-AA|{"IATA_code":"AA","airline_name":"American Airlines Inc."}
-US|{"IATA_code":"US","airline_name":"US Airways Inc."}
-F9|{"IATA_code":"F9","airline_name":"Frontier Airlines Inc."}
-B6|{"IATA_code":"B6","airline_name":"JetBlue Airways"}
-OO|{"IATA_code":"OO","airline_name":"Skywest Airlines Inc."}
-AS|{"IATA_code":"AS","airline_name":"Alaska Airlines Inc."}
-NK|{"IATA_code":"NK","airline_name":"Spirit Air Lines"}
-WN|{"IATA_code":"WN","airline_name":"Southwest Airlines Co."}
-DL|{"IATA_code":"DL","airline_name":"Delta Air Lines Inc."}
-EV|{"IATA_code":"EV","airline_name":"Atlantic Southeast Airlines"}
-HA|{"IATA_code":"HA","airline_name":"Hawaiian Airlines Inc."}
-MQ|{"IATA_code":"MQ","airline_name":"American Eagle Airlines Inc."}
-VX|{"IATA_code":"VX","airline_name":"Virgin America"}
+UA|{"iata_code":"UA","airline_name":"United Air Lines Inc."}
+AA|{"iata_code":"AA","airline_name":"American Airlines Inc."}
+US|{"iata_code":"US","airline_name":"US Airways Inc."}
+F9|{"iata_code":"F9","airline_name":"Frontier Airlines Inc."}
+B6|{"iata_code":"B6","airline_name":"JetBlue Airways"}
+OO|{"iata_code":"OO","airline_name":"Skywest Airlines Inc."}
+AS|{"iata_code":"AS","airline_name":"Alaska Airlines Inc."}
+NK|{"iata_code":"NK","airline_name":"Spirit Air Lines"}
+WN|{"iata_code":"WN","airline_name":"Southwest Airlines Co."}
+DL|{"iata_code":"DL","airline_name":"Delta Air Lines Inc."}
+EV|{"iata_code":"EV","airline_name":"Atlantic Southeast Airlines"}
+HA|{"iata_code":"HA","airline_name":"Hawaiian Airlines Inc."}
+MQ|{"iata_code":"MQ","airline_name":"American Eagle Airlines Inc."}
+VX|{"iata_code":"VX","airline_name":"Virgin America"}

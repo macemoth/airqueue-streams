@@ -2,7 +2,7 @@ package ch.unisg.airqueue.model;
 
 public class Airport {
 
-    private String IATACode;
+    private String iataCode;
     private String airportName;
     private String city;
     private String state;
@@ -13,8 +13,8 @@ public class Airport {
     @Override
     public String toString() {
         return "{"
-                + " IATACode='"
-                + IATACode
+                + " iataCode='"
+                + iataCode
                 + "'"
                 + ", airportName='"
                 + airportName
@@ -37,12 +37,12 @@ public class Airport {
                 + "}";
     }
 
-    public String getIATACode() {
-        return IATACode;
+    public String getIataCode() {
+        return iataCode;
     }
 
-    public void setIATACode(String IATACode) {
-        this.IATACode = IATACode;
+    public void setIataCode(String iataCode) {
+        this.iataCode = iataCode;
     }
 
     public String getAirportName() {
