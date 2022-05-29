@@ -18,8 +18,7 @@ public class FlightEnriched {
         this.originAirportName = startAirport.getAirportName();
         this.destinationAirportCode = destinationAirport.getIataCode();
         this.destinationAirportName = destinationAirport.getAirportName();
-        // TODO Marc: bring in departure delay from data
-        this.departureDelay = 0.0;
+        this.departureDelay = flight.getDepartureDelay();
         this.arrivalDelay = flight.getArrivalDelay();
     }
 

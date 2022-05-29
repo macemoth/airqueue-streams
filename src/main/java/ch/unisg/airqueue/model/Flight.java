@@ -8,6 +8,7 @@ public class Flight {
     private String tailNumber;
     private String originAirport;
     private String destinationAirport;
+    private double departureDelay;
     private double arrivalDelay;
 
     @Override
@@ -31,6 +32,9 @@ public class Flight {
                 + ", destinationAirport='"
                 + destinationAirport
                 + "'"
+                + ", departureDelay='"
+                + departureDelay +
+                "'"
                 + ", arrivalDelay='"
                 + arrivalDelay +
                 "'"
@@ -83,6 +87,14 @@ public class Flight {
 
     public void setDestinationAirport(String destinationAirport) {
         this.destinationAirport = destinationAirport;
+    }
+
+    public double getDepartureDelay() {
+        return departureDelay;
+    }
+
+    public void setDepartureDelay(double departureDelay) {
+        this.departureDelay = departureDelay;
     }
 
     public double getArrivalDelay() {
