@@ -7,6 +7,13 @@ kafka-topics \
   --replication-factor 1 \
   --partitions 1 \
   --create
+# create the flights topic for incoming flight stream
+kafka-topics \
+  --bootstrap-server kafka:9092 \
+  --topic flights-pseudo \
+  --replication-factor 1 \
+  --partitions 1 \
+  --create
 # create the airlines topic
 kafka-topics \
   --bootstrap-server kafka:9092 \

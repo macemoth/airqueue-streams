@@ -41,7 +41,7 @@ public class AcasTopology {
         builder.addStateStore(storeBuilder, "ACAS processor");
 
         builder.addSink("Flight sink",
-                "flights",
+                "flights-pseudo",
                 Serdes.String().serializer(),
                 JsonSerdes.Flight().serializer(),
                 "ACAS processor");
