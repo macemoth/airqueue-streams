@@ -2,18 +2,22 @@ package ch.unisg.airqueue.model;
 
 public class AcasEvent {
     // private String hex; // ICAO flight identifier
-    private String flight; // callsign
+    private String flight; // first two are airline ICAO, remainder is flight number
+    private String registration;
     private double lat;
     private double lon;
-    private String unixTimestamp;
+    private String utc;
     private double groundSpeed;
+    private int onGround;
 
-    public AcasEvent(String flight, double lat, double lon, String unixTimestamp, double groundSpeed) {
+    public AcasEvent(String flight, String registration, double lat, double lon, String unixTimestamp, double groundSpeed, int onGround) {
         this.flight = flight;
+        this.registration = registration;
         this.lat = lat;
         this.lon = lon;
-        this.unixTimestamp = unixTimestamp;
+        this.utc = unixTimestamp;
         this.groundSpeed = groundSpeed;
+        this.onGround = onGround;
     }
 
     @Override
@@ -22,17 +26,23 @@ public class AcasEvent {
                 + " flight='"
                 + flight
                 + "'"
+                + " registration='"
+                + registration
+                + "'"
                 + ", lat='"
                 + lat
                 + "'"
                 + ", lon='"
                 + lon
                 + "'"
-                + ", unixTimestamp='"
-                + unixTimestamp
+                + ", utc='"
+                + utc
                 + "'"
                 + ", groundSpeed='"
                 + groundSpeed
+                + "'"
+                + ", onGround='"
+                + onGround
                 + "'"
                 + "}";
     }
@@ -43,6 +53,14 @@ public class AcasEvent {
 
     public void setFlight(String flight) {
         this.flight = flight;
+    }
+
+    public String getRegistration() {
+        return registration;
+    }
+
+    public void setRegistration(String registration) {
+        this.registration = registration;
     }
 
     public double getLat() {
@@ -61,12 +79,12 @@ public class AcasEvent {
         this.lon = lon;
     }
 
-    public String getUnixTimestamp() {
-        return unixTimestamp;
+    public String getUtc() {
+        return utc;
     }
 
-    public void setUnixTimestamp(String unixTimestamp) {
-        this.unixTimestamp = unixTimestamp;
+    public void setUtc(String utc) {
+        this.utc = utc;
     }
 
     public double getGroundSpeed() {
@@ -75,5 +93,13 @@ public class AcasEvent {
 
     public void setGroundSpeed(double groundSpeed) {
         this.groundSpeed = groundSpeed;
+    }
+
+    public int isOnGround() {
+        return onGround;
+    }
+
+    public void setOnGround(int onGround) {
+        this.onGround = onGround;
     }
 }

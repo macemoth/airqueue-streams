@@ -22,10 +22,16 @@ kafka-topics \
   --partitions 1 \
   --create
   # create the tracked topic for those flights we want to observe
-  kafka-topics \
-    --bootstrap-server kafka:9092 \
-    --topic tracked \
-    --replication-factor 1 \
-    --partitions 1 \
-    --create
+kafka-topics \
+  --bootstrap-server kafka:9092 \
+  --topic tracked \
+  --replication-factor 1 \
+  --partitions 1 \
+  --create
+kafka-topics \
+  --bootstrap-server kafka:9092 \
+  --topic acas \
+  --replication-factor 1 \
+  --partitions 1 \
+  --create
 sleep infinity

@@ -5,16 +5,15 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.state.HostInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
 
-public class App {
+public class DelayApp {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DelayApp.class);
     private static final String APP_HOST = "localhost";
     private static final String APP_PORT = "7000";
     private static final String STATE_DIR = "/tmp/kafka-streams";

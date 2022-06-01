@@ -82,12 +82,7 @@ public class EnrichAndDelayTopology {
                 );
 
         KStream<String, FlightEnriched> flightsEnriched =
-                flightsWithOriginAirport.join(airports, destinationAirportMapper, enrichedFlightJoiner)
-                        .peek(
-                                (key, value) -> {
-                                    LOGGER.info("Joined product " + key + " with value " + value);
-                                }
-                        );
+                flightsWithOriginAirport.join(airports, destinationAirportMapper, enrichedFlightJoiner);
 
         // Write to tracked using custom serialiser
         flightsEnriched.to("tracked", Produced.with(Serdes.String(), JsonSerdes.FlightEnriched()));

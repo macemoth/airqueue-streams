@@ -64,4 +64,10 @@ public class JsonSerdes {
         return Serdes.serdeFrom(serialiser, deserialiser);
     }
 
+    public static Serde<IncompleteFlight> IncompleteFlight() {
+        JsonSerialiser<IncompleteFlight> serialiser = new JsonSerialiser<>();
+        JsonDeserialiser<IncompleteFlight> deserialiser = new JsonDeserialiser<>(IncompleteFlight.class);
+        return Serdes.serdeFrom(serialiser, deserialiser);
+    }
+
 }

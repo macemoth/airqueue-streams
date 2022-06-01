@@ -2,13 +2,14 @@ package ch.unisg.airqueue;
 
 
 import ch.unisg.airqueue.TimestampExtractors.AcasTimestampExtractor;
-import ch.unisg.airqueue.model.AcasEvent;
+import ch.unisg.airqueue.model.IncompleteFlight;
+import ch.unisg.airqueue.processor.AcasFlightProcessor;
 import ch.unisg.airqueue.serialisation.JsonSerdes;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.state.KeyValueStore;
+import org.apache.kafka.streams.state.StoreBuilder;
+import org.apache.kafka.streams.state.Stores;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,14 +18,34 @@ public class AcasTopology {
     private static final Logger LOGGER = LoggerFactory.getLogger(AcasTopology.class);
 
     public static Topology buildTopology() {
-        StreamsBuilder builder = new StreamsBuilder();
+        Topology builder = new Topology();
 
-        KStream<String, AcasEvent> flights =
-                builder.stream("acas", Consumed.with(Serdes.ByteArray(), JsonSerdes.AcasEvent())
-                        .withTimestampExtractor(new AcasTimestampExtractor()))
-                        // stream is unkeyed, we select airline as key to meet co-partitioning requirements
-                        .selectKey((k, v) -> v.getFlight());
+        builder.addSource(
+            Topology.AutoOffsetReset.LATEST,
+        "ACAS events",
+            new AcasTimestampExtractor(),
+            Serdes.ByteArray().deserializer(),
+            JsonSerdes.AcasEvent().deserializer(),
+            "acas");
 
-        return null;
+        builder.addProcessor("ACAS processor",
+                AcasFlightProcessor::new,
+                "ACAS events");
+
+        StoreBuilder<KeyValueStore<String, IncompleteFlight>> storeBuilder =
+                Stores.keyValueStoreBuilder(
+                        Stores.persistentKeyValueStore("acas-flights"),
+                        Serdes.String(),
+                        JsonSerdes.IncompleteFlight());
+
+        builder.addStateStore(storeBuilder, "ACAS processor");
+
+        builder.addSink("Flight sink",
+                "flights",
+                Serdes.String().serializer(),
+                JsonSerdes.Flight().serializer(),
+                "ACAS processor");
+
+        return builder;
     }
 }
