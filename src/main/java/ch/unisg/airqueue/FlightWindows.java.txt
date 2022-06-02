@@ -1,0 +1,35 @@
+package ch.unisg.airqueue;
+
+import org.apache.kafka.streams.kstream.Window;
+import org.apache.kafka.streams.kstream.Windows;
+import org.apache.kafka.streams.kstream.internals.;
+
+import java.util.Map;
+
+/**
+ * This is well-off the documentation
+ */
+public class FlightWindows extends Windows<Window> {
+
+    private String flight;
+
+    public FlightWindows(final String flight) {
+        this.flight = flight;
+    }
+
+    @Override
+    public Map<Long, Window> windowsFor(long l) {
+        new Window()
+        return null;
+    }
+
+    @Override
+    public long size() {
+        return 0;
+    }
+
+    @Override
+    public long gracePeriodMs() {
+        return 0;
+    }
+}

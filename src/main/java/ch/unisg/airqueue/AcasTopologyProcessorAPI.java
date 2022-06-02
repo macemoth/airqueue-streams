@@ -13,9 +13,9 @@ import org.apache.kafka.streams.state.Stores;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AcasTopology {
+public class AcasTopologyProcessorAPI {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AcasTopology.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AcasTopologyProcessorAPI.class);
 
     public static Topology buildTopology() {
         Topology builder = new Topology();

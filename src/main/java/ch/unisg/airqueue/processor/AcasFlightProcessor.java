@@ -1,5 +1,6 @@
 package ch.unisg.airqueue.processor;
 
+import ch.unisg.airqueue.Utils;
 import ch.unisg.airqueue.model.AcasEvent;
 import ch.unisg.airqueue.model.Flight;
 import ch.unisg.airqueue.model.IncompleteFlight;
@@ -37,7 +38,7 @@ public class AcasFlightProcessor implements Processor<Byte, AcasEvent, String, F
             // If acas event is from the ground, we consider the flight to start at that moment
             if (record.value().isOnGround() == 1) {
                 // For brevity, we omit matching with a flight database to determine the airport and delays
-                incomplete.setOriginAirport(getGeoUri(record.value().getLat(), record.value().getLon()));
+                incomplete.setOriginAirport(Utils.getGeoUri(record.value().getLat(), record.value().getLon()));
             } // if acas event is not on the ground, it already started before. Then we don't know the origin airport
             else {
                 incomplete.setOriginAirport("Unknown");
@@ -47,7 +48,7 @@ public class AcasFlightProcessor implements Processor<Byte, AcasEvent, String, F
         } else {
             // the flight has landed, finish it and emit new event
             if (record.value().isOnGround() == 1) {
-                value.setDestinationAirport(getGeoUri(record.value().getLat(), record.value().getLon()));
+                value.setDestinationAirport(Utils.getGeoUri(record.value().getLat(), record.value().getLon()));
                 Flight f = value.toFlight();
                 Record<String, Flight> event = new Record<>(value.getFlight(), f, Instant.parse(f.getTime()).toEpochMilli());
                 store.delete(key); // delete from flight state
@@ -62,12 +63,5 @@ public class AcasFlightProcessor implements Processor<Byte, AcasEvent, String, F
     @Override
     public void close() {
 
-    }
-
-    /**
-     * Transforms two coordinates to a geo URI (https://en.wikipedia.org/wiki/Geo_URI_scheme)
-     */
-    private String getGeoUri(Double lat, Double lon) {
-        return "geo:" + lat.toString() + ", " + lon.toString();
     }
 }
