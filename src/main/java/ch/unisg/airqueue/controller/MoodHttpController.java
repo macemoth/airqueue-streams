@@ -1,6 +1,5 @@
 package ch.unisg.airqueue.controller;
 
-import ch.unisg.airqueue.model.AirportDelay;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import org.apache.kafka.streams.KafkaStreams;
@@ -16,26 +15,23 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Similar to lab13s LeaderboardService class (why reinvent the wheel?)
- */
-public class HttpController {
+public class MoodHttpController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MoodHttpController.class);
 
     private final HostInfo hostInfo;
     private final KafkaStreams kafkaStreams;
 
-    public HttpController(String host, String port, KafkaStreams kafkaStreams) {
+    public MoodHttpController(String host, String port, KafkaStreams kafkaStreams) {
         this.hostInfo = new HostInfo(host, Integer.parseInt(port));
         this.kafkaStreams = kafkaStreams;
     }
 
-    ReadOnlyKeyValueStore<String, AirportDelay> getDelays() {
+    ReadOnlyKeyValueStore<String, Double> getMood() {
         return kafkaStreams.store(
                 StoreQueryParameters.fromNameAndType(
                         // state store name
-                        "delays",
+                        "mood",
                         // state store type
                         QueryableStoreTypes.keyValueStore()));
     }
@@ -44,38 +40,38 @@ public class HttpController {
         Javalin javalinApp = Javalin.create().start(hostInfo.port());
 
         // Local key-value store query: all entries
-        javalinApp.get("/averages", this::getAll);
+        javalinApp.get("/mood", this::getAll);
 
         // Render all as html
-        javalinApp.get("averagesList", this::getAllHtml);
+        javalinApp.get("moodList", this::getAllHtml);
     }
 
     public void getAll(Context context) {
-         KeyValueIterator<String, AirportDelay> delays = getDelays().all();
-         Map<String, Double> averageDelays = new HashMap<>();
+         KeyValueIterator<String, Double> moodIterator = getMood().all();
+         Map<String, Double> moodByAirport = new HashMap<>();
 
-         while(delays.hasNext()) {
-             KeyValue<String, AirportDelay> average = delays.next();
-             averageDelays.put(average.key, average.value.getGeneralDelay());
+         while(moodIterator.hasNext()) {
+             KeyValue<String, Double> mood = moodIterator.next();
+             moodByAirport.put(mood.key, mood.value);
          }
 
-        delays.close();
-         context.json(averageDelays);
+         moodIterator.close();
+         context.json(moodByAirport);
     }
 
     public void getAllHtml(Context context) {
-        KeyValueIterator<String, AirportDelay> averages = getDelays().all();
+        KeyValueIterator<String, Double> moodByAirport = getMood().all();
         StringBuilder page = new StringBuilder();
-        page.append("<html> <head><title>airqueue: Average delay by airport</title>");
+        page.append("<html> <head><title>airqueue: Mood by airport</title>");
         page.append("<style type=\"text/css\">p font-family: Comic Sans MS;</style></head>");
-        page.append("<body><h1>Average delay by airport</h1>");
-        page.append("<table><thead><th>Airport</th><th>Avgerage Delay (minutes)</th></thead>");
+        page.append("<body><h1>Mood by airport</h1>");
+        page.append("<table><thead><th>Airport</th><th>Mood score (predicted delay)</th></thead>");
         page.append("<tbody>");
-        while(averages.hasNext()) {
-            KeyValue<String, AirportDelay> delay = averages.next();
-            page.append("<tr><td>" + delay.key + "</td><td>" + delay.value.getGeneralDelay() + "</td></tr>");
+        while(moodByAirport.hasNext()) {
+            KeyValue<String, Double> mood = moodByAirport.next();
+            page.append("<tr><td>" + mood.key + "</td><td>" + mood.value + "</td></tr>");
         }
-        averages.close();
+        moodByAirport.close();
 
         page.append("</tbody></table></body></html>");
         context.html(page.toString());

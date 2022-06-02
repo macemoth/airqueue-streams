@@ -2,12 +2,12 @@ package ch.unisg.airqueue.model;
 
 public class AirportDelay {
 
-    private Airport airport;
+    private String airport;
     private double originDelay;
     private double destinationDelay;
 
-    public AirportDelay(double originDelay, double destinationDelay) {
-        this.airport = new Airport();
+    public AirportDelay(String airport, double originDelay, double destinationDelay) {
+        this.airport = airport;
         this.originDelay = originDelay;
         this.destinationDelay = destinationDelay;
     }
@@ -31,11 +31,11 @@ public class AirportDelay {
         return (originDelay+destinationDelay) / 2.0;
     }
 
-    public Airport getAirport() {
+    public String getAirport() {
         return airport;
     }
 
-    public void setAirport(Airport airport) {
+    public void setAirport(String airport) {
         this.airport = airport;
     }
 

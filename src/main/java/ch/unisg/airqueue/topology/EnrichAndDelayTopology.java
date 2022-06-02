@@ -122,7 +122,9 @@ public class EnrichAndDelayTopology {
 
         ValueJoiner<Average, Average, AirportDelay> airportDelayJoiner =
                 (averageOrigin, averageDestination) -> new AirportDelay(
-                        averageOrigin.getDepartureAverage(), averageDestination.getArrivalAverage()
+                        averageOrigin.getDepartureAirport(),
+                        averageOrigin.getDepartureAverage(),
+                        averageDestination.getArrivalAverage()
                 );
 
         // TODO: if time allows, do outer join
@@ -132,6 +134,8 @@ public class EnrichAndDelayTopology {
                                 as("delays")
                                 .withKeySerde(Serdes.String())
                                 .withValueSerde(JsonSerdes.AirportDelay()));
+
+        delaysByAirport.toStream().to("airport-delay", Produced.with(Serdes.String(), JsonSerdes.AirportDelay()));
 
         return builder.build();
     }

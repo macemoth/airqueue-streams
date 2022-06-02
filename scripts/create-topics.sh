@@ -37,6 +37,12 @@ kafka-topics \
   --create
 kafka-topics \
   --bootstrap-server kafka:9092 \
+  --topic airport-delay \
+  --replication-factor 1 \
+  --partitions 1 \
+  --create
+kafka-topics \
+  --bootstrap-server kafka:9092 \
   --topic acas \
   --replication-factor 1 \
   --partitions 1 \

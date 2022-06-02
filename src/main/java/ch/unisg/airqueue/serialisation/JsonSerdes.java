@@ -2,6 +2,7 @@ package ch.unisg.airqueue.serialisation;
 
 import ch.unisg.airqueue.aggregates.AcasAggregate;
 import ch.unisg.airqueue.aggregates.Average;
+import ch.unisg.airqueue.aggregates.Prediction;
 import ch.unisg.airqueue.model.*;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
@@ -74,6 +75,12 @@ public class JsonSerdes {
     public static Serde<AcasAggregate> AcasAggregate() {
         JsonSerialiser<AcasAggregate> serialiser = new JsonSerialiser<>();
         JsonDeserialiser<AcasAggregate> deserialiser = new JsonDeserialiser<>(AcasAggregate.class);
+        return Serdes.serdeFrom(serialiser, deserialiser);
+    }
+
+    public static Serde<Prediction> Prediction() {
+        JsonSerialiser<Prediction> serialiser = new JsonSerialiser<>();
+        JsonDeserialiser<Prediction> deserialiser = new JsonDeserialiser<>(Prediction.class);
         return Serdes.serdeFrom(serialiser, deserialiser);
     }
 

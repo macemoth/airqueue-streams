@@ -35,4 +35,20 @@ public class Average {
         }
         return sum / ((double) flights.size());
     }
+
+    public String getDepartureAirport() {
+        if(flights.size() == 0) {
+            return "";
+        } else {
+            return flights.get(0).getOriginAirportCode();
+        }
+    }
+
+    public String getDestinationAirport() {
+        if(flights.size() == 0) {
+            return "";
+        } else {
+            return flights.get(0).getDestinationAirportCode();
+        }
+    }
 }
