@@ -1,5 +1,6 @@
 package ch.unisg.airqueue;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
@@ -17,14 +18,16 @@ public class AcasApp {
 
     public static void main(String[] args) {
         LOGGER.info("Building topology...");
-        Topology topology = AcasTopology.buildTopology();
+        // Those can freely be interchanged and illustrate two approaches to the same problem
+        //Topology topology = AcasTopologyDSL.buildTopology();
+        Topology topology = AcasTopologyProcessorAPI.buildTopology();
         LOGGER.info("Topology built");
 
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "consumer");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         props.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
-        // props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         props.put(StreamsConfig.APPLICATION_SERVER_CONFIG, APP_HOST + ":" + APP_PORT);
         props.put(StreamsConfig.STATE_DIR_CONFIG, STATE_DIR);
 
@@ -38,5 +41,6 @@ public class AcasApp {
 
         LOGGER.info("Starting up Kafka Streams");
         streams.start();
+        LOGGER.info("Done");
     }
 }
