@@ -1,4 +1,4 @@
-package ch.unisg.airqueue.TimestampExtractors;
+package ch.unisg.airqueue.extractor;
 
 import ch.unisg.airqueue.model.AcasEvent;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

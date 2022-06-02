@@ -1,7 +1,7 @@
 package ch.unisg.airqueue.serialisation;
 
-import ch.unisg.airqueue.AcasAggregate;
-import ch.unisg.airqueue.Average;
+import ch.unisg.airqueue.aggregates.AcasAggregate;
+import ch.unisg.airqueue.aggregates.Average;
 import ch.unisg.airqueue.model.*;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;

@@ -1,6 +1,7 @@
-package ch.unisg.airqueue;
+package ch.unisg.airqueue.topology;
 
-import ch.unisg.airqueue.TimestampExtractors.AcasTimestampExtractor;
+import ch.unisg.airqueue.aggregates.AcasAggregate;
+import ch.unisg.airqueue.extractor.AcasTimestampExtractor;
 import ch.unisg.airqueue.model.AcasEvent;
 import ch.unisg.airqueue.model.Flight;
 import ch.unisg.airqueue.serialisation.JsonSerdes;

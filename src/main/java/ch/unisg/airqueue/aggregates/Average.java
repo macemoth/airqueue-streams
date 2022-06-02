@@ -1,4 +1,4 @@
-package ch.unisg.airqueue;
+package ch.unisg.airqueue.aggregates;
 
 import ch.unisg.airqueue.model.FlightEnriched;
 

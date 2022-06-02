@@ -1,5 +1,6 @@
-package ch.unisg.airqueue;
+package ch.unisg.airqueue.aggregates;
 
+import ch.unisg.airqueue.Utils;
 import ch.unisg.airqueue.model.AcasEvent;
 import ch.unisg.airqueue.model.Flight;
 

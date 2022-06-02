@@ -1,7 +1,8 @@
-package ch.unisg.airqueue;
+package ch.unisg.airqueue.topology;
 
 
-import ch.unisg.airqueue.TimestampExtractors.FlightTimestampExtractor;
+import ch.unisg.airqueue.aggregates.Average;
+import ch.unisg.airqueue.extractor.FlightTimestampExtractor;
 import ch.unisg.airqueue.model.*;
 import ch.unisg.airqueue.serialisation.JsonSerdes;
 import org.apache.kafka.common.serialization.Serdes;

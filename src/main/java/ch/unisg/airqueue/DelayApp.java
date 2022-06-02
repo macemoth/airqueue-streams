@@ -1,6 +1,7 @@
 package ch.unisg.airqueue;
 
 import ch.unisg.airqueue.controller.HttpController;
+import ch.unisg.airqueue.topology.EnrichAndDelayTopology;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
