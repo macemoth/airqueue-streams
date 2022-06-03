@@ -67,7 +67,7 @@ public class DelaysHttpController {
         KeyValueIterator<String, AirportDelay> averages = getDelays().all();
         StringBuilder page = new StringBuilder();
         page.append("<html> <head><title>airqueue: Average delay by airport</title>");
-        page.append("<style type=\"text/css\">p font-family: Comic Sans MS;</style></head>");
+        page.append("<style type=\"text/css\">body {font-family: \"Comic Sans MS\";}</style></head>");
         page.append("<body><h1>Average delay by airport</h1>");
         page.append("<table><thead><th>Airport</th><th>Avgerage Delay (minutes)</th></thead>");
         page.append("<tbody>");
