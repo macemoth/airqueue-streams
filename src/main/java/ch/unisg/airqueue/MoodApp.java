@@ -1,6 +1,5 @@
 package ch.unisg.airqueue;
 
-import ch.unisg.airqueue.controller.DelaysHttpController;
 import ch.unisg.airqueue.controller.MoodHttpController;
 import ch.unisg.airqueue.topology.MoodTopology;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

@@ -10,7 +10,8 @@ public class AcasEvent {
     private double groundSpeed;
     private int onGround;
 
-    public AcasEvent(String flight, String registration, double lat, double lon, String unixTimestamp, double groundSpeed, int onGround) {
+    public AcasEvent(String flight, String registration, double lat, double lon, String unixTimestamp,
+            double groundSpeed, int onGround) {
         this.flight = flight;
         this.registration = registration;
         this.lat = lat;

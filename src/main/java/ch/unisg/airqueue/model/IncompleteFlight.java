@@ -49,19 +49,20 @@ public class IncompleteFlight {
 
     /**
      * Makeshift method for creating a real flight object
+     * 
      * @return
      */
     public Flight toFlight() {
         Flight f = new Flight(
                 this.time,
                 "XX", // this would have to be looked up
-                this.tailNumber, // we don't have the flight number, but it is often the tail number and could be looked up
+                this.tailNumber, // we don't have the flight number, but it is often the tail number and could be
+                                 // looked up
                 this.tailNumber,
                 this.originAirport,
                 this.destinationAirport,
                 this.departureDelay,
-                this.arrivalDelay
-        );
+                this.arrivalDelay);
         return f;
     }
 
