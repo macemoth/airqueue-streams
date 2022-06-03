@@ -31,4 +31,6 @@ To observe the topics, messages and consumers, open [localhost:8080](http://loca
 
 - A Web UI showing results of the *FlightDataAnalysis* application is available at [localhost:7000/averagesList](http://localhost:7000/averagesList).
 
-- A Web UI showing the results of the *AirportsSentiment* application is available at [localhost:7001/moodList](http://localhost:7001/moodList), which displays the mood of each airport. Further, _the mood-o-meter_ for a specific airport can be called at [localhost:7001/airport/:airport](http://localhost:7001/airport/:airport) by specifiying the _:airport_. 
+- A Web UI showing the results of the *AirportsSentiment* application is available at [localhost:7001/moodList](http://localhost:7001/moodList), which displays the mood of each airport.
+
+-  To further inspect the above sentiment results, _the mood-o-meter_ for a specific airport can be called at [localhost:7001/airport/:airport](http://localhost:7001/airport/:airport) by specifiying the _:airport_. 
