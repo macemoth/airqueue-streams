@@ -24,7 +24,7 @@
 
 4. Run the main classes `AcasApp`, `DelayApp` and `MoodApp` from the IDE.
 
-To observe at the topics, messages and consumers, open [localhost:8080](http://localhost:8080). Individual messages can be examined by topic.
+To observe the topics, messages and consumers, open [localhost:8080](http://localhost:8080). Individual messages can be examined by topic.
 
 
 ## Endpoints
