@@ -33,24 +33,30 @@ public class AcasFlightProcessor implements Processor<Byte, AcasEvent, String, F
 
         // If flight has never been seen before
         if (value == null) {
-            IncompleteFlight incomplete = new IncompleteFlight(time, record.value().getFlight(), record.value().getRegistration());
+            IncompleteFlight incomplete = new IncompleteFlight(time, record.value().getFlight(),
+                    record.value().getRegistration());
 
-            // If acas event is from the ground, we consider the flight to start at that moment
+            // If acas event is from the ground, we consider the flight to start at that
+            // moment
             if (record.value().isOnGround() == 1) {
-                // For brevity, we omit matching with a flight database to determine the airport and delays
+                // For brevity, we omit matching with a flight database to determine the airport
+                // and delays
                 incomplete.setOriginAirport(Utils.getGeoUri(record.value().getLat(), record.value().getLon()));
-            } // if acas event is not on the ground, it already started before. Then we don't know the origin airport
+            } // if acas event is not on the ground, it already started before. Then we don't
+              // know the origin airport
             else {
                 incomplete.setOriginAirport("Unknown");
             }
             store.put(incomplete.getFlight(), incomplete);
-        // flight has already been seen recently, check whether it has landed or is still going
+            // flight has already been seen recently, check whether it has landed or is
+            // still going
         } else {
             // the flight has landed, finish it and emit new event
             if (record.value().isOnGround() == 1) {
                 value.setDestinationAirport(Utils.getGeoUri(record.value().getLat(), record.value().getLon()));
                 Flight f = value.toFlight();
-                Record<String, Flight> event = new Record<>(value.getFlight(), f, Instant.parse(f.getTime()).toEpochMilli());
+                Record<String, Flight> event = new Record<>(value.getFlight(), f,
+                        Instant.parse(f.getTime()).toEpochMilli());
                 store.delete(key); // delete from flight state
                 context.forward(event);
                 LOGGER.info("Created new flight " + key);

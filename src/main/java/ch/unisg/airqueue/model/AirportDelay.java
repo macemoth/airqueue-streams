@@ -28,7 +28,7 @@ public class AirportDelay {
     }
 
     public double getGeneralDelay() {
-        return (originDelay+destinationDelay) / 2.0;
+        return (originDelay + destinationDelay) / 2.0;
     }
 
     public String getAirport() {

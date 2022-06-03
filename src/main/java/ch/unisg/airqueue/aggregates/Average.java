@@ -15,7 +15,7 @@ public class Average {
     }
 
     public double getArrivalAverage() {
-        if(flights.size() == 0) {
+        if (flights.size() == 0) {
             return Double.NaN;
         }
         double sum = 0;
@@ -26,18 +26,18 @@ public class Average {
     }
 
     public double getDepartureAverage() {
-        if(flights.size() == 0) {
+        if (flights.size() == 0) {
             return Double.NaN;
         }
         double sum = 0;
-        for (FlightEnriched flight: flights) {
+        for (FlightEnriched flight : flights) {
             sum += flight.getDepartureDelay();
         }
         return sum / ((double) flights.size());
     }
 
     public String getDepartureAirport() {
-        if(flights.size() == 0) {
+        if (flights.size() == 0) {
             return "";
         } else {
             return flights.get(0).getOriginAirportCode();
@@ -45,7 +45,7 @@ public class Average {
     }
 
     public String getDestinationAirport() {
-        if(flights.size() == 0) {
+        if (flights.size() == 0) {
             return "";
         } else {
             return flights.get(0).getDestinationAirportCode();

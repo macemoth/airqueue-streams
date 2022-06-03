@@ -10,8 +10,6 @@ import org.apache.kafka.streams.state.HostInfo;
 import org.apache.kafka.streams.state.KeyValueIterator;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +18,6 @@ import java.util.Map;
  * Similar to lab13s LeaderboardService class (why reinvent the wheel?)
  */
 public class DelaysHttpController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DelaysHttpController.class);
 
     private final HostInfo hostInfo;
     private final KafkaStreams kafkaStreams;
@@ -51,16 +47,16 @@ public class DelaysHttpController {
     }
 
     public void getAll(Context context) {
-         KeyValueIterator<String, AirportDelay> delays = getDelays().all();
-         Map<String, Double> averageDelays = new HashMap<>();
+        KeyValueIterator<String, AirportDelay> delays = getDelays().all();
+        Map<String, Double> averageDelays = new HashMap<>();
 
-         while(delays.hasNext()) {
-             KeyValue<String, AirportDelay> average = delays.next();
-             averageDelays.put(average.key, average.value.getGeneralDelay());
-         }
+        while (delays.hasNext()) {
+            KeyValue<String, AirportDelay> average = delays.next();
+            averageDelays.put(average.key, average.value.getGeneralDelay());
+        }
 
         delays.close();
-         context.json(averageDelays);
+        context.json(averageDelays);
     }
 
     public void getAllHtml(Context context) {
@@ -71,7 +67,7 @@ public class DelaysHttpController {
         page.append("<body><h1>Average delay by airport</h1>");
         page.append("<table><thead><th>Airport</th><th>Avgerage Delay (minutes)</th></thead>");
         page.append("<tbody>");
-        while(averages.hasNext()) {
+        while (averages.hasNext()) {
             KeyValue<String, AirportDelay> delay = averages.next();
             page.append("<tr><td>" + delay.key + "</td><td>" + delay.value.getGeneralDelay() + "</td></tr>");
         }
@@ -80,7 +76,5 @@ public class DelaysHttpController {
         page.append("</tbody></table></body></html>");
         context.html(page.toString());
     }
-
-
 
 }

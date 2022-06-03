@@ -11,7 +11,8 @@ public class Flight {
     private double departureDelay;
     private double arrivalDelay;
 
-    public Flight(String time, String airline, String flightNumber, String tailNumber, String originAirport, String destinationAirport, double departureDelay, double arrivalDelay) {
+    public Flight(String time, String airline, String flightNumber, String tailNumber, String originAirport,
+            String destinationAirport, double departureDelay, double arrivalDelay) {
         this.time = time;
         this.airline = airline;
         this.flightNumber = flightNumber;

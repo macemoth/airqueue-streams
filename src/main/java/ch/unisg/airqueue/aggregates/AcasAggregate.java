@@ -18,16 +18,16 @@ public class AcasAggregate {
 
     public Flight toFlight() {
         AcasEvent first = events.get(0);
-        AcasEvent last = events.get(events.size()-1);
+        AcasEvent last = events.get(events.size() - 1);
 
         String originAirport, destinationAirport;
-        if(first.isOnGround() == 1) {
+        if (first.isOnGround() == 1) {
             originAirport = Utils.getGeoUri(first.getLat(), first.getLon());
         } else {
             originAirport = "Unknown";
         }
 
-        if(last.isOnGround() == 1) {
+        if (last.isOnGround() == 1) {
             destinationAirport = Utils.getGeoUri(last.getLat(), last.getLon());
         } else {
             destinationAirport = "Unknown";
@@ -37,12 +37,12 @@ public class AcasAggregate {
                 last.getUtc(),
                 "XX",
                 last.getFlight(),
-                last.getFlight(), // we don't have the flight number, but it is often the tail number and could be looked up
+                last.getFlight(), // we don't have the flight number, but it is often the tail number and could be
+                                  // looked up
                 originAirport,
                 destinationAirport,
                 0.0,
-                0.0
-        );
+                0.0);
         return f;
     }
 

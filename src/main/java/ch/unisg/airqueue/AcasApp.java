@@ -19,8 +19,8 @@ public class AcasApp {
 
     public static void main(String[] args) {
         LOGGER.info("Building topology...");
-        // Those can freely be interchanged and illustrate two approaches to the same problem
-        //Topology topology = AcasTopologyDSL.buildTopology();
+        // The following two topologies can be freely interchanged and illustrate two approaches to the same problem
+        // Topology topology = AcasTopologyDSL.buildTopology();
         Topology topology = AcasTopologyProcessorAPI.buildTopology();
         LOGGER.info("Topology built");
 

@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
-
 public class DelayApp {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DelayApp.class);
@@ -48,12 +47,5 @@ public class DelayApp {
         DelaysHttpController controller = new DelaysHttpController(APP_HOST, APP_PORT, streams);
         controller.start();
     }
-
-
-
-
-
-
-
 
 }

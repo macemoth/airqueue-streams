@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Freely taken from lab13
  */
-public class JsonSerialiser<T> implements Serializer<T>  {
+public class JsonSerialiser<T> implements Serializer<T> {
 
     private Gson gson = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)

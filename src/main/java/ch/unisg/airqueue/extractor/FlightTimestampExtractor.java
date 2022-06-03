@@ -11,7 +11,6 @@ import java.time.Instant;
  */
 public class FlightTimestampExtractor implements TimestampExtractor {
 
-
     @Override
     public long extract(ConsumerRecord<Object, Object> consumerRecord, long l) {
         Flight flight = (Flight) consumerRecord.value();
