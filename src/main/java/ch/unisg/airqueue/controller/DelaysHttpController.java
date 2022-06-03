@@ -19,14 +19,14 @@ import java.util.Map;
 /**
  * Similar to lab13s LeaderboardService class (why reinvent the wheel?)
  */
-public class HttpController {
+public class DelaysHttpController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DelaysHttpController.class);
 
     private final HostInfo hostInfo;
     private final KafkaStreams kafkaStreams;
 
-    public HttpController(String host, String port, KafkaStreams kafkaStreams) {
+    public DelaysHttpController(String host, String port, KafkaStreams kafkaStreams) {
         this.hostInfo = new HostInfo(host, Integer.parseInt(port));
         this.kafkaStreams = kafkaStreams;
     }
@@ -67,7 +67,7 @@ public class HttpController {
         KeyValueIterator<String, AirportDelay> averages = getDelays().all();
         StringBuilder page = new StringBuilder();
         page.append("<html> <head><title>airqueue: Average delay by airport</title>");
-        page.append("<style type=\"text/css\">p font-family: Comic Sans MS;</style></head>");
+        page.append("<style type=\"text/css\">body {font-family: \"Comic Sans MS\";}</style></head>");
         page.append("<body><h1>Average delay by airport</h1>");
         page.append("<table><thead><th>Airport</th><th>Avgerage Delay (minutes)</th></thead>");
         page.append("<tbody>");

@@ -1,25 +1,23 @@
 package ch.unisg.airqueue.model;
 
-public class Flight {
+public class IncompleteFlight {
 
     private String time;
-    private String airline;
-    private String flightNumber;
+    private String flight;
     private String tailNumber;
     private String originAirport;
     private String destinationAirport;
     private double departureDelay;
     private double arrivalDelay;
 
-    public Flight(String time, String airline, String flightNumber, String tailNumber, String originAirport, String destinationAirport, double departureDelay, double arrivalDelay) {
+    public IncompleteFlight(String time, String flight, String registration) {
         this.time = time;
-        this.airline = airline;
-        this.flightNumber = flightNumber;
-        this.tailNumber = tailNumber; // equivalent with registration of ACAS
-        this.originAirport = originAirport;
-        this.destinationAirport = destinationAirport;
-        this.departureDelay = departureDelay;
-        this.arrivalDelay = arrivalDelay;
+        this.flight = flight;
+        this.tailNumber = registration;
+        this.originAirport = "Unknown";
+        this.destinationAirport = "Unknown";
+        this.departureDelay = 0.0;
+        this.arrivalDelay = 0.0;
     }
 
     @Override
@@ -28,13 +26,10 @@ public class Flight {
                 + " time='"
                 + time
                 + "'"
-                + ", airline='"
-                + airline
+                + " flight='"
+                + flight
                 + "'"
-                + ", flightNumber='"
-                + flightNumber
-                + "'"
-                + ", tailNumber='"
+                + " tailNumber='"
                 + tailNumber
                 + "'"
                 + ", originAirport='"
@@ -52,6 +47,24 @@ public class Flight {
                 + "}";
     }
 
+    /**
+     * Makeshift method for creating a real flight object
+     * @return
+     */
+    public Flight toFlight() {
+        Flight f = new Flight(
+                this.time,
+                "XX", // this would have to be looked up
+                this.tailNumber, // we don't have the flight number, but it is often the tail number and could be looked up
+                this.tailNumber,
+                this.originAirport,
+                this.destinationAirport,
+                this.departureDelay,
+                this.arrivalDelay
+        );
+        return f;
+    }
+
     public String getTime() {
         return time;
     }
@@ -60,20 +73,12 @@ public class Flight {
         this.time = time;
     }
 
-    public String getAirline() {
-        return airline;
+    public String getFlight() {
+        return flight;
     }
 
-    public void setAirline(String airline) {
-        this.airline = airline;
-    }
-
-    public String getFlightNumber() {
-        return flightNumber;
-    }
-
-    public void setFlightNumber(String flightNumber) {
-        this.flightNumber = flightNumber;
+    public void setFlight(String flight) {
+        this.flight = flight;
     }
 
     public String getTailNumber() {

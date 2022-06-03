@@ -1,27 +1,27 @@
 package ch.unisg.airqueue;
 
-import ch.unisg.airqueue.controller.HttpController;
+import ch.unisg.airqueue.topology.AcasTopologyProcessorAPI;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.state.HostInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
+public class AcasApp {
 
-public class App {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AcasApp.class);
     private static final String APP_HOST = "localhost";
     private static final String APP_PORT = "7000";
     private static final String STATE_DIR = "/tmp/kafka-streams";
 
     public static void main(String[] args) {
         LOGGER.info("Building topology...");
-        Topology topology = EnrichAndDelayTopology.buildTopology();
+        // Those can freely be interchanged and illustrate two approaches to the same problem
+        //Topology topology = AcasTopologyDSL.buildTopology();
+        Topology topology = AcasTopologyProcessorAPI.buildTopology();
         LOGGER.info("Topology built");
 
         Properties props = new Properties();
@@ -37,23 +37,11 @@ public class App {
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
 
         // Cleaning up while in development
-        // TODO: Remove when in production
         LOGGER.info("Cleaning up State dir");
         streams.cleanUp();
 
         LOGGER.info("Starting up Kafka Streams");
         streams.start();
-
-        LOGGER.info("Starting up HTTP Controller");
-        HttpController controller = new HttpController(APP_HOST, APP_PORT, streams);
-        controller.start();
+        LOGGER.info("Done");
     }
-
-
-
-
-
-
-
-
 }

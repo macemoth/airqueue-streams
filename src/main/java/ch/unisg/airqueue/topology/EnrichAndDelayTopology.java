@@ -1,6 +1,8 @@
-package ch.unisg.airqueue;
+package ch.unisg.airqueue.topology;
 
 
+import ch.unisg.airqueue.aggregates.Average;
+import ch.unisg.airqueue.extractor.FlightTimestampExtractor;
 import ch.unisg.airqueue.model.*;
 import ch.unisg.airqueue.serialisation.JsonSerdes;
 import org.apache.kafka.common.serialization.Serdes;
@@ -81,12 +83,7 @@ public class EnrichAndDelayTopology {
                 );
 
         KStream<String, FlightEnriched> flightsEnriched =
-                flightsWithOriginAirport.join(airports, destinationAirportMapper, enrichedFlightJoiner)
-                        .peek(
-                                (key, value) -> {
-                                    LOGGER.info("Joined product " + key + " with value " + value);
-                                }
-                        );
+                flightsWithOriginAirport.join(airports, destinationAirportMapper, enrichedFlightJoiner);
 
         // Write to tracked using custom serialiser
         flightsEnriched.to("tracked", Produced.with(Serdes.String(), JsonSerdes.FlightEnriched()));
@@ -125,7 +122,9 @@ public class EnrichAndDelayTopology {
 
         ValueJoiner<Average, Average, AirportDelay> airportDelayJoiner =
                 (averageOrigin, averageDestination) -> new AirportDelay(
-                        averageOrigin.getDepartureAverage(), averageDestination.getArrivalAverage()
+                        averageOrigin.getDepartureAirport(),
+                        averageOrigin.getDepartureAverage(),
+                        averageDestination.getArrivalAverage()
                 );
 
         // TODO: if time allows, do outer join
@@ -135,6 +134,8 @@ public class EnrichAndDelayTopology {
                                 as("delays")
                                 .withKeySerde(Serdes.String())
                                 .withValueSerde(JsonSerdes.AirportDelay()));
+
+        delaysByAirport.toStream().to("airport-delay", Produced.with(Serdes.String(), JsonSerdes.AirportDelay()));
 
         return builder.build();
     }

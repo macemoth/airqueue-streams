@@ -95,7 +95,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>ch.unisg.airqueue.App</mainClass>
+                    <mainClass>ch.unisg.airqueue.DelayApp</mainClass>
                     <systemProperties>
                         <systemProperty>
                             <key>host</key>
