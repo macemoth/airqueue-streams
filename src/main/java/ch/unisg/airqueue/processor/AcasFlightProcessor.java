@@ -27,6 +27,13 @@ public class AcasFlightProcessor implements Processor<Byte, AcasEvent, String, F
 
     @Override
     public void process(Record<Byte, AcasEvent> record) {
+        // Preliminary filtering
+
+        // Filtering
+        if(record.value().getLat() == 0.0 && record.value().getLat() == 0.0) {
+            return;
+        }
+
         String key = record.value().getFlight();
         String time = Instant.ofEpochMilli(record.timestamp()).toString();
         IncompleteFlight value = store.get(key);
