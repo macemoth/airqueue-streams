@@ -1,5 +1,6 @@
 package ch.unisg.airqueue;
 
+import ch.unisg.airqueue.topology.AcasTopologyDSL;
 import ch.unisg.airqueue.topology.AcasTopologyProcessorAPI;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KafkaStreams;
@@ -21,7 +22,7 @@ public class AcasApp {
         LOGGER.info("Building topology...");
         // The following two topologies can be freely interchanged and illustrate two approaches to the same problem
         // Topology topology = AcasTopologyDSL.buildTopology();
-        Topology topology = AcasTopologyProcessorAPI.buildTopology();
+        Topology topology = AcasTopologyDSL.buildTopology();
         LOGGER.info("Topology built");
 
         Properties props = new Properties();

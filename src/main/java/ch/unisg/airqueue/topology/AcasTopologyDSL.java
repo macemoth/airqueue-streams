@@ -6,6 +6,7 @@ import ch.unisg.airqueue.model.AcasEvent;
 import ch.unisg.airqueue.model.Flight;
 import ch.unisg.airqueue.serialisation.JsonSerdes;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
@@ -26,6 +27,12 @@ public class AcasTopologyDSL {
                                                 .withTimestampExtractor(new AcasTimestampExtractor()))
                                 .selectKey((k, v) -> v.getFlight());
 
+                KStream<String, AcasEvent> filteredEvents = events
+                        // Filter out events that have both coordinates 0
+                        .filterNot( (key, value) -> {
+                                return (value.getLat() == 0.0 && value.getLat() == 0.0);
+                        });
+
                 // We assume that after receiving no events for 15 minutes, the plane has either
                 // landed or left the observed airspace
                 // TODO: ADR on why grace period!
@@ -39,7 +46,7 @@ public class AcasTopologyDSL {
                 Merger<String, AcasAggregate> acasAggregateMerger = (key, aggregate1, aggregate2) -> aggregate1
                                 .mergeWith(aggregate2);
 
-                KStream<String, Flight> flights = events
+                KStream<String, Flight> flights = filteredEvents
                                 .groupByKey(Grouped.with(Serdes.String(), JsonSerdes.AcasEvent()))
                                 .windowedBy(flightWindow)
                                 .aggregate(acasInitializer, aggregateAdder, acasAggregateMerger,
@@ -48,7 +55,11 @@ public class AcasTopologyDSL {
                                 .toStream()
                                 .mapValues(
                                                 (value) -> value.toFlight())
-                                .selectKey((k, v) -> k.key());
+                                .selectKey((k, v) -> k.key())
+                        .peek((key, value) -> {
+                                LOGGER.info(key + " has been created");
+                        });
+
 
                 flights.to("flights-pseudo", Produced.with(Serdes.String(), JsonSerdes.Flight()));
 
