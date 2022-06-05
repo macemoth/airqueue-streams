@@ -23,6 +23,8 @@ public class AcasTopologyProcessorAPI {
                 JsonSerdes.AcasEvent().deserializer(),
                 "acas");
 
+        // TODO: introdce filter for erroneous or empty events
+
         builder.addProcessor("ACAS processor",
                 AcasFlightProcessor::new,
                 "ACAS events");

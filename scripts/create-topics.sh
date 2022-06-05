@@ -31,7 +31,7 @@ kafka-topics \
   # create the tracked topic for those flights we want to observe
 kafka-topics \
   --bootstrap-server kafka:9092 \
-  --topic tracked \
+  --topic flights-enriched \
   --replication-factor 1 \
   --partitions 1 \
   --create

@@ -25,8 +25,6 @@ public class EnrichAndDelayTopology {
                                 // requirements
                                 .selectKey((k, v) -> v.getAirline());
 
-                // TODO: Consider and discuss filtering
-
                 // Airlines has IATA code as key (same as airline in flight)
                 KTable<String, Airline> airlines = builder.table("airlines",
                                 Consumed.with(Serdes.String(), JsonSerdes.Airline()));
@@ -80,7 +78,7 @@ public class EnrichAndDelayTopology {
                                 destinationAirportMapper, enrichedFlightJoiner);
 
                 // Write to tracked using custom serialiser
-                flightsEnriched.to("tracked", Produced.with(Serdes.String(), JsonSerdes.FlightEnriched()));
+                flightsEnriched.to("flights-enriched", Produced.with(Serdes.String(), JsonSerdes.FlightEnriched()));
 
                 // Create tumbling window of 30 min above flights
                 TimeWindows hoppingWindow = TimeWindows.of(Duration.ofMinutes(30)).advanceBy(Duration.ofSeconds(10));
