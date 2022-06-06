@@ -1,8 +1,10 @@
 package ch.unisg.airqueue;
 
+import ch.unisg.airqueue.partitioner.AcasPartitioner;
 import ch.unisg.airqueue.topology.AcasTopologyDSL;
 import ch.unisg.airqueue.topology.AcasTopologyProcessorAPI;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
@@ -32,6 +34,8 @@ public class AcasApp {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         props.put(StreamsConfig.APPLICATION_SERVER_CONFIG, APP_HOST + ":" + APP_PORT);
         props.put(StreamsConfig.STATE_DIR_CONFIG, STATE_DIR);
+        // Our custom partitioner
+        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, AcasPartitioner.class.getName());
 
         LOGGER.info("Creating Kafka Streams instance");
         KafkaStreams streams = new KafkaStreams(topology, props);
