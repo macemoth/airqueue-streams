@@ -28,6 +28,10 @@
 
 To observe the topics, messages and consumers, open Kafka UI on [localhost:8080](http://localhost:8080). Individual messages can be examined by topic.
 
+### Multi-broker, multi-partition version
+
+The `multi` branch contains a version supporting multiple Kafka brokers, along with two partitions for the `acas` topic and a custom partitioner.
+To run them, use `docker-compose -f docker-compose-multi.yml` and `test-acas-multi.sh`.
 
 ## Endpoints
 
@@ -45,6 +49,8 @@ Frequently observed errors:
 We solved this problem by regenerating maven sources and reloading the Maven project.
   
 - When using a Mac with ARM architecture, the containers sometimes needed restarts and we experienced best performance when using the x64 OpenJDK JVM (not ARM).
+
+- When using Mac OS, several ports that Kafka uses may be occupied by sharing services. They can be turned off in "Sharing". 
 
 - When using Windows without WSL, you may need to execute `create-topics.sh` manually on the container running Kafka.
 Furthermore, use the test scripts that have the `-win` postfix.
