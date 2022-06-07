@@ -8,11 +8,13 @@
 
 2. Open in your IDE (we use IntelliJ) and import as Maven Project, if not already done.
 
-3. `cd` into the base directory and run `docker-compose up`
+3. Run `mvn clean install` to let Avro Scheme autogenerate the model classes 
 
-4. Run the main classes `AcasApp`, `DelayApp` or `MoodApp` from the IDE (they can be run independently, except `MoodApp`'s input stream is dependent on `DelayApp`).
+4. `cd` into the base directory and run `docker-compose up`
 
-5. Ingest test data by running the scripts `./scripts/test-acas.sh`, (for `AcasApp`) or `./scripts/test-delays.sh` (for `DelayApp` and `MoodApp`), respectively. For Windows, use the test scripts that have the `-win` postfix. 
+5. Run the main classes `AcasApp`, `DelayApp` or `MoodApp` from the IDE (they can be run independently, except `MoodApp`'s input stream is dependent on `DelayApp`).
+
+6. Ingest test data by running the scripts `./scripts/test-acas.sh`, (for `AcasApp`) or `./scripts/test-delays.sh` (for `DelayApp` and `MoodApp`), respectively. For Windows, use the test scripts that have the `-win` postfix. 
 
 To observe the topics, messages and consumers, open Kafka UI on [localhost:8080](http://localhost:8080). Individual messages can be examined by topic.
 

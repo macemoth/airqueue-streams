@@ -4,11 +4,11 @@
     "type": "record",
     "fields": [
     {
-        "name": "IATA_code",
+        "name": "iata_code",
         "type": "string"
     },
     {
-        "name": "airline",
+        "name": "airline_name",
         "type": "string"
     }
     ]

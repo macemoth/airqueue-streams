@@ -27,7 +27,7 @@ public class EnrichAndDelayTopology {
 
                 // Airlines has IATA code as key (same as airline in flight)
                 KTable<String, Airline> airlines = builder.table("airlines",
-                                Consumed.with(Serdes.String(), JsonSerdes.Airline()));
+                                Consumed.with(Serdes.String(), JsonSerdes.Airline())); // Deliberately used JsonSerdes, as AvroSerdes.get(Airline.class)) throws error
 
                 // Airports has IATA code as key
                 GlobalKTable<String, Airport> airports = builder.globalTable("airports",
