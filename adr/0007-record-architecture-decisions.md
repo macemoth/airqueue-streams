@@ -1,4 +1,4 @@
-# 1. Grouping for Airport Delay Topology
+# 7. Grouping for Airport Delay Topology
 
 Date: 2022-06-07
 
@@ -16,5 +16,5 @@ We decided to do the window-aggregate operation twice, once for origin delays an
 
 ## Consequences
 
-    - The aggregates contain irrelevant information (e.g. the average origin delay of all flights landing in JFK), which can be ignored
-    - Two tables are produced, which are joined again in order to have only the desired origin and destination delays.
+* The aggregates contain irrelevant information (e.g. the average origin delay of all flights landing in JFK), which can be ignored
+* Two tables are produced, which are joined again in order to have only the desired origin and destination delays.

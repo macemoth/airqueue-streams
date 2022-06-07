@@ -1,4 +1,4 @@
-# 1. Avro
+# 8. Avro
 
 Date: 2022-06-07
 
@@ -16,7 +16,7 @@ All data model classes with the exception of Airline are not offered via Avro sc
 
 ## Consequences
 
-    - Without avro registry our application scales worse and increased code dupplication is given when other Kafka streams applications are added
-    - JsonSerdes must implement se- and deserialisers for the classes
-    - In this project, we have fewer dependencies to Avro
-    - We can nest data model classes
+* Without avro registry our application scales worse and increased code dupplication is given when other Kafka streams applications are added
+* JsonSerdes must implement se- and deserialisers for the classes
+* In this project, we have fewer dependencies to Avro
+* We can nest data model classes

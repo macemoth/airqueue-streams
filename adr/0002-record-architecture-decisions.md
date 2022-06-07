@@ -1,4 +1,4 @@
-# 1. Project (architecture) separation from Part I
+# 2. Project (architecture) separation from Part I
 
 Date: 2022-06-07
 

@@ -1,4 +1,4 @@
-# 1. SessionWindows for DSL Topology
+# 6. SessionWindows for DSL Topology
 
 Date: 2022-06-07
 
@@ -16,5 +16,5 @@ As we have no way to determine the destination airport with the data given, we n
 
 ## Consequences
 
-    - Clear distinction of the cases depending on the `on_ground` flag
-    - Not using the longitude and latitude of events that have no `on_ground` flag on first or last time seen.
+* Clear distinction of the cases depending on the `on_ground` flag.
+* Not using the longitude and latitude of events that have no `on_ground` flag on first or last time seen.
