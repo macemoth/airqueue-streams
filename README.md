@@ -1,18 +1,6 @@
+![airqueue](https://user-images.githubusercontent.com/12049283/172338789-51d9beb9-98b0-4707-bbaf-07dd4f0ff19e.png)
+
 # airqueue-streams
-```
-              .------,
-              =\      \
- .---.         =\      \
- | C~ \         =\      \
- |     `----------'------'----------,
-.'     LI.-.LI LI LI LI LI LI LI.-.LI`-.
-\ _/.____|_|______.------,______|_|_____)
-                 /      /
-               =/      /
-              =/      /
-             =/      /
-      jgs    /_____,'
-```
 
 ## Running Instructions
 
