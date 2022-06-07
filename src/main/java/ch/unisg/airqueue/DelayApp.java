@@ -36,7 +36,6 @@ public class DelayApp {
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
 
         // Cleaning up while in development
-        // TODO: Remove when in production
         LOGGER.info("Cleaning up State dir");
         streams.cleanUp();
 

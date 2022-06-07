@@ -121,7 +121,7 @@ public class EnrichAndDelayTopology {
                                                 averageOrigin.getDepartureAverage(),
                                                 averageDestination.getArrivalAverage());
 
-                // TODO: if time allows, do outer join
+                // alternative is to use outer join
                 KTable<String, AirportDelay> delaysByAirport = windowedOriginAverages.join(windowedDestinationAverages,
                                 airportDelayJoiner,
                                 Materialized.<String, AirportDelay, KeyValueStore<Bytes, byte[]>>as("delays")

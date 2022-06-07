@@ -35,7 +35,6 @@ public class AcasTopologyDSL {
 
                 // We assume that after receiving no events for 15 minutes, the plane has either
                 // landed or left the observed airspace
-                // TODO: ADR on why grace period!
                 SessionWindows flightWindow = SessionWindows.with(Duration.ofMinutes(15)).grace(Duration.ofSeconds(5));
 
                 Initializer<AcasAggregate> acasInitializer = AcasAggregate::new;
